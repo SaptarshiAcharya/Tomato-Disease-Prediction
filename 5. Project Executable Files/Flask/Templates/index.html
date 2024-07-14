@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tomato Leaf Disease Detector</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #121212;
+            color: #eaeaea;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            background-color: #222;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .hero-section {
+            background: linear-gradient(to right, #007bff, #00c6ff);
+            color: #fff;
+            padding: 150px 0;
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero-section p {
+            font-size: 1.75rem;
+            margin-bottom: 40px;
+        }
+
+        footer {
+            background-color: #222;
+            color: #eaeaea;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .nav-link:hover {
+            color: #007bff;
+        }
+
+        .predicted-disease {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+            background-color: #444;
+            color: #eaeaea;
+            padding: 12px 24px;
+            border-radius: 25px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .predicted-disease:hover {
+            background-color: #555;
+            color: #eaeaea;
+        }
+
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .section-content {
+            max-width: 800px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Tomato Leaf Disease Detector</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">HOME</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#model-working">MODEL WORKING</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#predict">PREDICT DISEASE</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">CONTACT</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero-section">
+            <div class="container">
+                <h1>Welcome to<br>Tomato Leaf Disease Detector</h1>
+                <p>Empower your gardening with AI-driven disease detection for tomato plants.</p>
+                <a href="#model-working" class="btn btn-primary">Learn About Our Model</a>
+            </div>
+        </section>
+
+        <!-- Model Working Section -->
+        <section id="model-working" class="py-5 bg-dark text-white">
+            <div class="container">
+                <h2>Model Working</h2>
+                <p>Our AI model leverages advanced machine learning algorithms to analyze images of tomato leaves. By processing the images at a pixel level, the model identifies patterns associated with various diseases. These patterns are then compared against a vast database of known disease indicators to provide accurate diagnoses. This technology ensures precise detection, enabling gardeners to take timely action to prevent further damage to their crops.</p>
+            </div>
+        </section>
+
+        <!-- Predict Section -->
+        <section id="predict" class="py-5 bg-dark text-white">
+            <div class="container text-center">
+                <h2>Predict Disease</h2>
+                <p>Upload the image of a tomato plant leaf to check for potential diseases.</p>
+                <form id="upload-form" method="POST" enctype="multipart/form-data" action="/predict">
+                    <div class="upload-area">
+                        <input type="file" id="image-upload" name="file" accept="image/*" class="form-control">
+                        <img id="preview-image" src="#" alt="your image" style="display:none;">
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Analyze Image</button>
+                </form>
+                <div id="result" class="mt-3">
+                    {% if result %}
+                        <p><span class="predicted-disease">Predicted Disease: {{ result }}</span></p>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-5 bg-dark text-white">
+            <div class="container">
+                <h2>Contact Us</h2>
+                <p>Have questions? Need assistance? Reach out to us through the contact form below.</p>
+                <form id="contactForm">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" placeholder="Your Name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="Your Email">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea class="form-control" id="message" rows="3" placeholder="Your Message"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-dark text-white">
+        <div class="container">
+            <p>&copy; 2024 Tomato Leaf Disease Detector. All rights reserved.</p>
+            <p><a href="#home">Back to top</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('image-upload').addEventListener('change', function(e) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                document.getElementById('preview-image').src = event.target.result;
+                document.getElementById('preview-image').style.display = 'block';
+            };
+            reader.readAsDataURL(this.files[0]);
+        });
+
+        // Function to handle form submission
+        function handleSubmit(event) {
+            // Prevent the default form submission
+            event.preventDefault();
+
+            // Display a success message
+            alert("Your response has been recorded.");
+
+            // Optionally, you can clear the form after submission
+            document.getElementById('contactForm').reset();
+        }
+
+        // Attach the event listener to the form
+        document.getElementById('contactForm').addEventListener('submit', handleSubmit);
+    </script>
+</body>
+</html>
